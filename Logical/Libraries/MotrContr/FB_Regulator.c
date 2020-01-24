@@ -1,0 +1,52 @@
+
+#include <bur/plctypes.h>
+#ifdef __cplusplus
+	extern "C"
+	{
+#endif
+#include "MotrContr.h"
+#include "Math.h"				///////////////////////
+#ifdef __cplusplus
+	};
+#endif
+/* TODO: Add your comment here */
+void FB_Regulator(struct FB_Regulator* inst)
+{
+	/*
+	inst->integrator.in=inst->e * inst->k_i * inst->dt + inst->iyOld;
+	
+	FB_Integrator(&(inst->integrator));
+	
+	inst->e_kp=inst->e*inst->k_p;
+	
+	inst->e_kp=(inst->e_kp > inst->max_abs_value || inst->e_kp < - inst->max_abs_value)?((inst->e_kp>0)?inst->max_abs_value:-inst->max_abs_value):inst->e_kp;
+	
+	inst->e_kp+=inst->integrator.out;
+	
+	inst->u=(inst->e_kp > inst->max_abs_value || inst->e_kp < - inst->max_abs_value)?((inst->e_kp>0)?inst->max_abs_value:-inst->max_abs_value):inst->e_kp;
+	
+	inst->iyOld=inst->u-inst->e_kp;
+	*/
+	
+	
+	inst->integrator.in = inst->k_i * inst->e + inst->iyOld / inst->dt;
+	FB_Integrator(&inst->integrator);
+	if(fabs(inst->k_p * inst->e) < inst->max_abs_value)
+	{
+		inst->e_kp = inst->e * inst->k_p + inst->integrator.out;
+	}
+	else
+	{
+		//BOOL a = 1;
+		inst->e_kp = inst->max_abs_value * copysign(1.0, inst->k_p * inst->e) + inst->integrator.out;
+	}
+	if(fabs(inst->e_kp) < inst->max_abs_value)
+	{
+		inst->u = inst->e_kp;
+	}
+	else
+	{
+		inst->u = inst->max_abs_value * copysign(1.0, inst->e_kp);
+	}
+	inst->iyOld = inst->u - inst->e_kp;
+}

@@ -1,0 +1,9 @@
+
+%001 (CncProgram)
+
+( TODO: Add code here )
+
+N10 F300000
+N20 G01 X66700 Y100000 Z100000
+
+N999 M30

@@ -1,0 +1,8 @@
+VAR
+	axis_Z : FB_Axis := (0);
+	coil_powered : BOOL := FALSE;
+	coil_pwm_value : INT := 0;
+	fb_controller : FB_Regulator := (0);
+	pwm_period : UINT := 0;
+	enable : BOOL := FALSE;
+END_VAR
